@@ -38,7 +38,8 @@ class ReservationController extends Controller
      * @Route("/new", name="reservation_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+   public function newAction(Request $request, Mailer $mailer)
+
     {
         $reservation = new Reservation();
         $form = $this->createForm('AppBundle\Form\ReservationType', $reservation);
@@ -48,6 +49,9 @@ class ReservationController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($reservation);
             $em->flush();
+
+            $mailer->sendEmail($reservation->getFlight()->getPilot()->getEmail());
+
 
             return $this->redirectToRoute('reservation_show', array('id' => $reservation->getId()));
         }
