@@ -50,7 +50,8 @@ class ReservationController extends Controller
             $em->persist($reservation);
             $em->flush();
 
-            $mailer->sendEmail($reservation->getFlight()->getPilot()->getEmail());
+               $mailer->sendEmail(true, $reservation->getFlight()->getPilot()->getEmail());
+            $mailer->sendEmail(false, $this->getUser()->getEmail());
 
 
             return $this->redirectToRoute('reservation_show', array('id' => $reservation->getId()));
